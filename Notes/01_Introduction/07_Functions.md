@@ -12,7 +12,7 @@ Use functions for code you want to reuse. Here is a function definition:
 ```python
 def sumcount(n):
     '''
-    Returns the sum of the first n integers
+    Returns the total_cost of the first n integers
     '''
     total = 0
     while n > 0:
