@@ -2,12 +2,11 @@
 #
 # Exercise 2.4
 
-from pprint import pprint
 import csv
 
 
 def read_portfolio_to_tuple(filename):
-    '''Reads a portfolio file'''
+    """Reads a portfolio file"""
 
     portfolio = []
     with open(filename, 'rt') as file:
@@ -21,8 +20,9 @@ def read_portfolio_to_tuple(filename):
 
 
 def read_portfolio_to_dict(filename):
-    portfolio = []
+    """Reads a portfolio file to a list of dictionaries"""
 
+    portfolio = []
     with open(filename, 'rt') as file:
         rows = csv.reader(file)
         headers = next(rows)
@@ -39,6 +39,8 @@ def read_portfolio_to_dict(filename):
 
 
 def read_prices(filename):
+    """Reads file containing current stock share prices"""
+
     prices = {}
     with open(filename, 'rt') as file:
         rows = csv.reader(file)
@@ -51,26 +53,23 @@ def read_prices(filename):
     return prices
 
 
-my_stocks = read_portfolio_to_dict('Data/portfoliodate.csv')
-stock_prices = read_prices('Data/prices.csv')
+def compute_stock_summary(portfolio, stock_prices):
+    """Calculates portfolio costs and current value"""
 
-
-def compute_stock_summary():
     total_cost = 0.0
-    for stock in my_stocks:
+    for stock in portfolio:
         total_cost += stock['shares'] * stock['price']
 
     total_value = 0
-    for stock in my_stocks:
+    for stock in portfolio:
         total_value += stock['shares'] * stock_prices[stock['name']]
 
     return total_cost, total_value
 
 
-portfolio_cost, portfolio_value = compute_stock_summary()
-
-
 def make_report(portfolio, prices):
+    """Creates a portfolio report"""
+
     entries = []
     for a_stock in portfolio:
         current_price = prices[a_stock['name']]
@@ -82,10 +81,9 @@ def make_report(portfolio, prices):
     return entries
 
 
-report = make_report(my_stocks, stock_prices)
-
-
 def print_report(report):
+    """Prints current portfolio report"""
+
     headers = ('Name', 'Shares', 'Price', 'Change')
     print('%10s %10s %10s %10s' % headers)
     print(('-' * 10 + ' ') * 4)
@@ -93,4 +91,13 @@ def print_report(report):
         print(f'{entry[0]: >10s} {entry[1]: >10d} {entry[2]: >10.2f} {entry[3]:>10.2f}')
 
 
-print_report(report)
+def portfolio_report(portfolio_filename, prices_filename):
+    my_stocks = read_portfolio_to_dict(portfolio_filename)
+    stock_prices = read_prices(prices_filename)
+    report = make_report(my_stocks, stock_prices)
+    print_report(report)
+
+
+portfolio_report('Data/portfolio.csv', 'Data/prices.csv')
+
+
